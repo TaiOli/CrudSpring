@@ -1,16 +1,17 @@
 package med.voll.api.medico;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.controller.DadosAtualizacaoMedico;
 import med.voll.api.endereco.Endereco;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "medicos")
 @Entity(name = "Medico")
+@DynamicUpdate
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +33,7 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
+    @Column(nullable = false)
     private Boolean ativo;
 
     public Medico(DadosCadastroMedico dados) {
