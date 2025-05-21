@@ -25,22 +25,13 @@ public class AgendaDeConsultas {
     private PacienteRepository pacienteRepository;
 
     public Consulta agendar(DadosAgendamentoConsulta dados) {
-        // Verificar se paciente existe e se está ativo
+        // Verificar se id do paciente é informado
         var paciente = pacienteRepository.findById(dados.idPaciente())
                 .orElseThrow(() -> new ValidacaoException("Id do paciente informado não existe!"));
-        if (!paciente.getAtivo()) {
-            throw new ValidacaoException("Paciente está inativo no sistema!");
-        }
 
-        // Verificar se id do médico é informado, se existe e se está ativo
-        Medico medico = null;
-        if (dados.idMedico() != null) {
-            medico = medicoRepository.findById(dados.idMedico())
-                    .orElseThrow(() -> new ValidacaoException("Id do médico informado não existe!"));
-            if (!medico.getAtivo()) {
-                throw new ValidacaoException("Médico está inativo no sistema!");
-            }
-        }
+        // Verificar se id do médico é informado
+        var medico = medicoRepository.findById(dados.idMedico())
+                .orElseThrow(() -> new ValidacaoException("ID do médico não encontrado"));
 
         // Validar o horário de funcionamento da clínica
         validadorHorario.validar(dados);
