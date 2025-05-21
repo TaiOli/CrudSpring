@@ -4,12 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import med.voll.api.domain.ValidacaoException;
+import med.voll.api.domain.consulta.validacoes.ValidadorHorarioFuncionamentoClinica;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
 
 @Service
 public class AgendaDeConsultas {
+
+    @Autowired
+    private ValidadorHorarioFuncionamentoClinica validadorHorario;
 
     @Autowired
     private ConsultaRepository consultaRepository;
@@ -29,6 +33,8 @@ public class AgendaDeConsultas {
             throw new ValidacaoException("Id do médico informado não existe!");
         }
 
+        validadorHorario.validar(dados);
+
         var paciente = pacienteRepository.findById(dados.idPaciente()).get();
         var medico = escolherMedico(dados);
         var consulta = new Consulta(null, medico, paciente, dados.data());
@@ -46,8 +52,12 @@ public class AgendaDeConsultas {
             throw new ValidacaoException("Especialidade é obrigatória quando médico não for escolhido!");
         }
 
-        return medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(), dados.data());
+        var medico = medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(), dados.data());
+        if (medico == null) {
+            throw new ValidacaoException("Não existe médico disponível nessa data para a especialidade informada.");
+        }
 
+        return medico;
     }
 
 }

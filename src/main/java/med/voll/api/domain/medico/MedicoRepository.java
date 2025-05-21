@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import jakarta.transaction.Transactional;
 
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
@@ -19,11 +21,11 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
     void excluirFisicamente(Long id);
 
     @Query(value = """
-                select * from medico m
+                select * from medicos m
                 where m.ativo = 1
                 and m.especialidade = :especialidade
                 and m.id not in (
-                    select c.medico_id from consulta c
+                    select c.medico_id from consultas c
                     where c.data = :data
                 )
                 order by rand()
@@ -31,4 +33,10 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
             """, nativeQuery = true)
     Medico escolherMedicoAleatorioLivreNaData(Especialidade especialidade, LocalDateTime data);
 
+    @Query("""
+            select m.ativo
+            from Medico m
+            where m.id = :idMedico
+            """)
+    Boolean findAtivoById(@Param("idMedico") Long idMedico);
 }
