@@ -42,45 +42,12 @@ public class AgendaDeConsultas {
             }
         }
 
-        // Validar a antecedência mínima de 30 minutos
-        var agora = java.time.LocalDateTime.now();
-        if (dados.data().isBefore(agora.plusMinutes(30))) {
-            throw new ValidacaoException("Consulta deve ser agendada com antecedência mínima de 30 minutos!");
-        }
-
         // Validar o horário de funcionamento da clínica
         validadorHorario.validar(dados);
-
-        // Verificar se o paciente já tem consulta no mesmo dia
-        var inicioDia = dados.data().toLocalDate().atStartOfDay();
-        var fimDia = inicioDia.plusDays(1).minusNanos(1);
-        boolean pacienteTemConsultaNoDia = consultaRepository.existsByPacienteIdAndDataBetween(
-                dados.idPaciente(), inicioDia, fimDia);
-        if (pacienteTemConsultaNoDia) {
-            throw new ValidacaoException("Paciente já possui consulta agendada para este dia!");
-        }
 
         if (medico == null) {
             medico = escolherMedico(dados);
         }
-
-        // Escolher o médico se não for informado
-        if (medico == null) {
-            if (dados.especialidade() == null) {
-                throw new ValidacaoException("Especialidade é obrigatória quando médico não for escolhido!");
-            }
-            medico = medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(), dados.data());
-            if (medico == null) {
-                throw new ValidacaoException("Não existe médico disponível para esta especialidade e data!");
-            }
-        }
-
-        // Verificar se o médico já tem consulta agendada na mesma data/hora
-        boolean medicoTemConsultaNaData = consultaRepository.existsByMedicoIdAndData(medico.getId(), dados.data());
-        if (medicoTemConsultaNaData) {
-            throw new ValidacaoException("Médico já possui consulta agendada neste horário!");
-        }
-
         // Criar consulta e salvar
         var consulta = new Consulta(null, medico, paciente, dados.data());
         consultaRepository.save(consulta);
