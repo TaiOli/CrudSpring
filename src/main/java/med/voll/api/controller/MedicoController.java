@@ -63,7 +63,7 @@ public class MedicoController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        repository.excluirFisicamente(id);
+        repository.excluirLogicamente(id);
         return ResponseEntity.noContent().build();
     }
 

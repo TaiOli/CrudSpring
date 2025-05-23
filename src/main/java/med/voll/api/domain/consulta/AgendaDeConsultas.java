@@ -36,13 +36,16 @@ public class AgendaDeConsultas {
                 .orElseThrow(() -> new ValidacaoException("Id do paciente informado não existe!"));
 
         // Verificar se id do médico é informado
-        var medico = medicoRepository.findById(dados.idMedico())
-                .orElseThrow(() -> new ValidacaoException("ID do médico não encontrado"));
-
-        validadores.forEach(v -> v.validar(dados));
+        Medico medico = null;
+        if (dados.idMedico() != null) {
+            medico = medicoRepository.findById(dados.idMedico())
+                    .orElseThrow(() -> new ValidacaoException("ID do médico informado não existe!"));
+        }
 
         // Validar o horário de funcionamento da clínica
         validadorHorario.validar(dados);
+
+        validadores.forEach(v -> v.validar(dados));
 
         if (medico == null) {
             medico = escolherMedico(dados);

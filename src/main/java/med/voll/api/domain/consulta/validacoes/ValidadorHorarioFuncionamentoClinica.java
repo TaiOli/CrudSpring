@@ -9,7 +9,7 @@ import med.voll.api.domain.ValidacaoException;
 import med.voll.api.domain.consulta.DadosAgendamentoConsulta;
 
 @Component
-public class ValidadorHorarioFuncionamentoClinica {
+public class ValidadorHorarioFuncionamentoClinica implements ValidadorAgendamentoDeConsulta {
 
     public void validar(DadosAgendamentoConsulta dados) {
         var dataConsulta = dados.data();
@@ -19,7 +19,7 @@ public class ValidadorHorarioFuncionamentoClinica {
 
         var domingo = dataConsulta.getDayOfWeek().equals(DayOfWeek.SUNDAY);
         var abertura = LocalTime.of(7, 0);
-        var fechamento = LocalTime.of(18, 0);
+        var fechamento = LocalTime.of(17, 30);
 
         var antesDaAberturaDaClinica = horario.isBefore(abertura);
         var depoisDoEncerramentoDaClinica = horario.isAfter(fechamento);

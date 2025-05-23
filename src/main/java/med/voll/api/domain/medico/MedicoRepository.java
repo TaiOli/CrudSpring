@@ -17,8 +17,8 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Medico m WHERE m.id = :id")
-    void excluirFisicamente(Long id);
+    @Query("UPDATE Medico p SET p.ativo = false WHERE p.id = :id")
+    void excluirLogicamente(@Param("id") Long id);
 
     @Query(value = """
                 select * from medicos m

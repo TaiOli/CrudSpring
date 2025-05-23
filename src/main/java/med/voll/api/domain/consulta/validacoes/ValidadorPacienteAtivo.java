@@ -8,7 +8,7 @@ import med.voll.api.domain.consulta.DadosAgendamentoConsulta;
 import med.voll.api.domain.paciente.PacienteRepository;
 
 @Component
-public class ValidadorPacienteAtivo {
+public class ValidadorPacienteAtivo implements ValidadorAgendamentoDeConsulta {
 
     @Autowired
     private PacienteRepository repository;

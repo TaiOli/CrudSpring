@@ -14,8 +14,8 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Paciente m WHERE m.id = :id")
-    void excluirFisicamente(Long id);
+    @Query("UPDATE Paciente p SET p.ativo = false WHERE p.id = :id")
+    void excluirLogicamente(@Param("id") Long id);
 
     @Query("SELECT p.ativo FROM Paciente p WHERE p.id = :id")
     Boolean findAtivoById(@Param("id") Long id);
