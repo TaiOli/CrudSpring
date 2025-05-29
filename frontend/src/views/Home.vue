@@ -1,16 +1,29 @@
 <template>
-  <div class="container mt-5">
-    <div class="text-secondary text-start mb-4">Escolha uma seção para iniciar:</div>
+  <div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <h5 class="text-primary fw-bold">Gerenciando sua clínica</h5>
 
-    <div class="d-flex flex-column gap-3">
-      <router-link to="/medicos" class="w-100">
-        <button class="btn btn-outline-primary w-100 text-start">Médicos</button>
+    <p class="mt-4 mb-3 text-secondary">Escolha qual seção deseja iniciar:</p>
+
+    <div class="d-flex flex-column gap-3 w-100 btnAgenda">
+      <router-link to="/medicos">
+        <button class="btn btn-primary w-100 py-3 d-flex align-items-center justify-content-center gap-2">
+          <i class="bi bi-person-badge"></i>
+          Médicos(as)
+        </button>
       </router-link>
-      <router-link to="/pacientes" class="w-100">
-        <button class="btn btn-outline-success w-100 text-start">Pacientes</button>
+
+      <router-link to="/pacientes">
+        <button class="btn btn-primary w-100 py-3 d-flex align-items-center justify-content-center gap-2">
+          <i class="bi bi-person"></i>
+          Pacientes
+        </button>
       </router-link>
-      <router-link to="/consultas" class="w-100">
-        <button class="btn btn-outline-warning w-100 text-start">Consultas</button>
+
+      <router-link to="/consultas">
+        <button class="btn btn-primary w-100 py-3 d-flex align-items-center justify-content-center gap-2">
+          <i class="bi bi-calendar-event"></i>
+          Consultas
+        </button>
       </router-link>
     </div>
   </div>
