@@ -1,1 +1,1 @@
-<template><h2>Médicos</h2></template>
+<template><h2>Lista Médicos</h2></template>
