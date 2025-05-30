@@ -17,15 +17,15 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-             <router-link to="/medicos/cadastrar" class="text-decoration-none">
+              <router-link to="/medicos/cadastrar" class="nav-link">
                 Cadastrar Médico
-             </router-link>      
+              </router-link>
             </li>
           </ul>
         </div>
       </div>
     </nav>
-    
+
     <div class="container mt-4">
       <h4 class="mb-4">Lista de Médicos</h4>
 
@@ -40,14 +40,25 @@
 
       <ul class="list-group">
         <li
-          class="list-group-item d-flex justify-content-between align-items-center"
+          class="list-group-item"
           v-for="medico in medicosFiltrados"
           :key="medico.id"
         >
-          <div>
-            <strong>{{ medico.nome }}</strong>
-            <br />
-            <small class="text-muted">{{ medico.especialidade }}</small>
+          <div @click="toggleExpandir(medico.id)" class="d-flex justify-content-between align-items-center" style="cursor: pointer;">
+            <div>
+              <strong>{{ medico.nome }}</strong><br />
+              <small class="text-muted">{{ medico.especialidade }}</small>
+            </div>
+            <div>
+              <span v-if="medicoExpandido === medico.id">▲</span>
+              <span v-else>▼</span>
+            </div>
+          </div>
+
+          <div v-if="medicoExpandido === medico.id" class="mt-2 text-end">
+            <button @click="editarMedico(medico)" class="btn btn-sm btn-outline-primary">
+              Editar
+            </button>
           </div>
         </li>
       </ul>
@@ -63,6 +74,7 @@ export default {
 		return {
 			medicos: [],
 			termoBusca: "",
+			medicoExpandido: null,
 		};
 	},
 	mounted() {
@@ -73,17 +85,21 @@ export default {
 			try {
 				const response = await api.get("/medicos");
 				const lista = response.data.content;
-
 				this.medicos = lista.sort((a, b) => a.nome.localeCompare(b.nome));
 			} catch (error) {
 				console.error("Erro ao buscar médicos:", error);
 			}
 		},
+		toggleExpandir(id) {
+			this.medicoExpandido = this.medicoExpandido === id ? null : id;
+		},
+		editarMedico(medico) {
+			this.$router.push(`/medicos/editar/${medico.id}`);
+		},
 	},
 	computed: {
 		medicosFiltrados() {
 			if (!this.termoBusca) return this.medicos;
-
 			const busca = this.termoBusca.toLowerCase();
 			return this.medicos.filter((medico) =>
 				medico.nome.toLowerCase().includes(busca),
