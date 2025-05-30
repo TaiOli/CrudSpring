@@ -59,6 +59,9 @@
             <button @click="editarMedico(medico)" class="btn btn-sm btn-outline-primary">
               Editar
             </button>
+             <button @click="excluirMedico(medico.id)" class="btn btn-sm btn-outline-danger">
+                Excluir
+            </button>
           </div>
         </li>
       </ul>
@@ -95,6 +98,19 @@ export default {
 		},
 		editarMedico(medico) {
 			this.$router.push(`/medicos/editar/${medico.id}`);
+		},
+		async excluirMedico(id) {
+			if (!confirm("Tem certeza que deseja excluir este médico?")) return;
+
+			try {
+				await api.delete(`/medicos/${id}`);
+				this.medicos = this.medicos.filter((medico) => medico.id !== id);
+				if (this.medicoExpandido === id) this.medicoExpandido = null;
+				alert("Médico excluído com sucesso!");
+			} catch (error) {
+				console.error("Erro ao excluir médico:", error);
+				alert("Erro ao excluir médico.");
+			}
 		},
 	},
 	computed: {

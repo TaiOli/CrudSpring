@@ -31,6 +31,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/medicos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/medicos").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/medicos/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/medicos/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

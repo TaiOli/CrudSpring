@@ -125,7 +125,7 @@ export default {
 		async carregarMedico(id) {
 			try {
 				const response = await api.get(`/medicos/${id}`);
-				this.form = response.data; // assumindo que a API retorna no mesmo formato do form
+				this.form = response.data;
 			} catch (error) {
 				console.error("Erro ao carregar médico:", error);
 				alert("Não foi possível carregar os dados do médico.");
@@ -135,11 +135,9 @@ export default {
 		async salvarMedico() {
 			try {
 				if (this.isEditando) {
-					// Update
 					await api.put(`/medicos/${this.$route.params.id}`, this.form);
 					alert("Médico atualizado com sucesso!");
 				} else {
-					// Create
 					await api.post("/medicos", this.form);
 					alert("Médico cadastrado com sucesso!");
 					this.limparFormulario();
