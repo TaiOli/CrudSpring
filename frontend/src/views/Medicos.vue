@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="#">Clinica</a>
+        <router-link to="/" class="nav-link">Inicio</router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -56,7 +56,7 @@
           </div>
 
           <div v-if="medicoExpandido === medico.id" class="mt-2 text-end">
-            <button @click="editarMedico(medico)" class="btn btn-sm btn-outline-primary">
+            <button @click="editarMedico(medico)" class="btn btn-sm btn-outline-primary mx-2">
               Editar
             </button>
              <button @click="excluirMedico(medico.id)" class="btn btn-sm btn-outline-danger">
