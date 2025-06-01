@@ -4,7 +4,6 @@ import Medicos from "../views/Medicos.vue";
 import Pacientes from "../views/Pacientes.vue";
 import Consultas from "../views/Consultas.vue";
 import CadastroMedico from "../views/CadastroMedico.vue";
-import EditarMedico from "../views/CadastroMedico.vue";
 
 const routes = [
 	{ path: "/", component: Home },
