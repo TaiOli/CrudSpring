@@ -42,12 +42,16 @@
           <div
             @click="toggleExpandir(paciente.id)"
             class="d-flex justify-content-between align-items-center"
+            style="cursor: pointer;"
           >
             <p class="mb-0"><strong>Nome:</strong> {{ paciente.nome }}</p>
             <span>{{ pacienteExpandido === paciente.id ? "▲" : "▼" }}</span>
           </div>
 
-          <div v-if="pacienteExpandido === paciente.id && detalhesPaciente[paciente.id]" class="mt-3 ms-3">
+          <div
+            v-if="pacienteExpandido === paciente.id && detalhesPaciente[paciente.id]"
+            class="mt-3 ms-3"
+          >
             <p><strong>Email:</strong> {{ detalhesPaciente[paciente.id].email }}</p>
             <p><strong>Telefone:</strong> {{ detalhesPaciente[paciente.id].telefone }}</p>
             <p><strong>CPF:</strong> {{ detalhesPaciente[paciente.id].cpf }}</p>
@@ -66,15 +70,34 @@
             <div v-if="consultasPorPaciente[paciente.id]?.length">
               <h5 class="mt-3">Consultas</h5>
               <ul>
-                <li v-for="consulta in consultasPorPaciente[paciente.id]" :key="consulta.id" class="mt-3">
+                <li
+                  v-for="consulta in consultasPorPaciente[paciente.id]"
+                  :key="consulta.id"
+                  class="mt-3"
+                >
                   Data: {{ formatarData(consulta.data) }}<br />
                   Médico: {{ consulta.nomeMedico }} 
                 </li>
               </ul>
-
             </div>
             <div v-else>
               <p><em>Sem consultas agendadas.</em></p>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="mt-3 text-end">
+              <button
+                @click.stop="editarPaciente(paciente)"
+                class="btn btn-sm btn-outline-primary mx-2"
+              >
+                Editar
+              </button>
+              <button
+                @click.stop="excluirPaciente(paciente.id)"
+                class="btn btn-sm btn-outline-danger"
+              >
+                Excluir
+              </button>
             </div>
           </div>
         </li>
@@ -87,71 +110,89 @@
 import api from "@/services/api";
 
 export default {
-	data() {
-		return {
-			pacientes: [],
-			termoBusca: "",
-			pacienteExpandido: null,
-			detalhesPaciente: {},
-			consultasPorPaciente: {},
-		};
-	},
-	computed: {
-		pacientesFiltrados() {
-			const termo = this.termoBusca.toLowerCase();
-			return this.pacientes.filter((p) => p.nome.toLowerCase().includes(termo));
-		},
-	},
-	methods: {
-		async buscarPacientes() {
-			try {
-				const response = await api.get("/pacientes");
-				this.pacientes = response.data.content || response.data;
-			} catch (error) {
-				console.error("Erro ao buscar pacientes:", error);
-			}
-		},
-		async buscarDetalhesPaciente(id) {
-			try {
-				const response = await api.get(`/pacientes/${id}`);
-				this.detalhesPaciente[id] = response.data;
-			} catch (error) {
-				console.error("Erro ao buscar detalhes:", error);
-			}
-		},
-		async buscarConsultasDoPaciente(id) {
-			try {
-				const response = await api.get(`/consultas/paciente/${id}`);
-				this.consultasPorPaciente[id] = response.data;
-			} catch (error) {
-				console.error("Erro ao buscar consultas do paciente:", error);
-				this.consultasPorPaciente[id] = [];
-			}
-		},
-		async toggleExpandir(id) {
-			if (this.pacienteExpandido === id) {
-				this.pacienteExpandido = null;
-			} else {
-				this.pacienteExpandido = id;
+  data() {
+    return {
+      pacientes: [],
+      termoBusca: "",
+      pacienteExpandido: null,
+      detalhesPaciente: {},
+      consultasPorPaciente: {},
+    };
+  },
+  mounted() {
+    this.buscarPacientes();
+  },
+  methods: {
+    async buscarPacientes() {
+      try {
+        const response = await api.get("/pacientes");
+        this.pacientes = response.data.content || response.data;
+      } catch (error) {
+        console.error("Erro ao buscar pacientes:", error);
+      }
+    },
+    async buscarDetalhesPaciente(id) {
+      try {
+        const response = await api.get(`/pacientes/${id}`);
+        this.detalhesPaciente[id] = response.data;
+      } catch (error) {
+        console.error("Erro ao buscar detalhes:", error);
+      }
+    },
+    async buscarConsultasDoPaciente(id) {
+      try {
+        const response = await api.get(`/consultas/paciente/${id}`);
+        this.consultasPorPaciente[id] = response.data;
+      } catch (error) {
+        console.error("Erro ao buscar consultas:", error);
+        this.consultasPorPaciente[id] = [];
+      }
+    },
+    async toggleExpandir(id) {
+      if (this.pacienteExpandido === id) {
+        this.pacienteExpandido = null;
+      } else {
+        this.pacienteExpandido = id;
 
-				if (!this.detalhesPaciente[id]) {
-					await this.buscarDetalhesPaciente(id);
-				}
+        if (!this.detalhesPaciente[id]) {
+          await this.buscarDetalhesPaciente(id);
+        }
 
-				await this.buscarConsultasDoPaciente(id);
-			}
-		},
-		formatarData(data) {
-			const d = new Date(data);
-			return d.toLocaleDateString("pt-BR", {
-				day: "2-digit",
-				month: "2-digit",
-				year: "numeric",
-			});
-		},
-	},
-	mounted() {
-		this.buscarPacientes();
-	},
+        await this.buscarConsultasDoPaciente(id);
+      }
+    },
+    formatarData(data) {
+      const d = new Date(data);
+      return d.toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    },
+    editarPaciente(paciente) {
+      this.$router.push(`/pacientes/editar/${paciente.id}`);
+    },
+    async excluirPaciente(id) {
+      if (!confirm("Tem certeza que deseja excluir este paciente?")) return;
+
+      try {
+        await api.delete(`/pacientes/${id}`);
+        this.pacientes = this.pacientes.filter((p) => p.id !== id);
+        delete this.detalhesPaciente[id];
+        delete this.consultasPorPaciente[id];
+        this.pacienteExpandido = null;
+        alert("Paciente excluído com sucesso!");
+      } catch (error) {
+        console.error("Erro ao excluir paciente:", error);
+        alert("Erro ao excluir paciente.");
+      }
+    },
+  },
+  computed: {
+    pacientesFiltrados() {
+      const termo = this.termoBusca.toLowerCase();
+      return this.pacientes.filter((p) => p.nome.toLowerCase().includes(termo));
+    },
+  }
 };
 </script>

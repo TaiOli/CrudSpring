@@ -34,6 +34,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.DELETE, "/medicos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pacientes").permitAll()
                         .requestMatchers(HttpMethod.GET, "/pacientes/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/pacientes/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/pacientes/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/consultas").permitAll()
                         .requestMatchers(HttpMethod.GET, "/consultas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/consultas/paciente/**").permitAll()

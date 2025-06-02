@@ -4,8 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import java.time.LocalDateTime;
-import org.springframework.http.MediaType;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
 import med.voll.api.domain.consulta.AgendaDeConsultas;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.DadosAgendamentoConsulta;
@@ -31,62 +34,64 @@ import med.voll.api.domain.paciente.Paciente;
 @AutoConfigureJsonTesters
 public class ConsultaControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+        @Autowired
+        private MockMvc mvc;
 
-    @Autowired
-    private JacksonTester<DadosAgendamentoConsulta> dadosAgendamentoConsultaJson;
+        @Autowired
+        private JacksonTester<DadosAgendamentoConsulta> dadosAgendamentoConsultaJson;
 
-    @Autowired
-    private JacksonTester<DadosDetalhamentoConsulta> dadosDetalhamentoConsultaJson;
+        @Autowired
+        private JacksonTester<DadosDetalhamentoConsulta> dadosDetalhamentoConsultaJson;
 
-    @MockitoBean
-    private AgendaDeConsultas agendaDeConsultas;
+        @MockitoBean
+        private AgendaDeConsultas agendaDeConsultas;
 
-    @Test
-    @DisplayName("Deveria devolver código http 400 quando informações estao inválidas")
-    @WithMockUser
-    void agendar_cenario1() throws Exception {
-        MvcResult result = mvc.perform(post("/consultas"))
-                .andReturn();
+        @Test
+        @DisplayName("Deveria devolver código http 400 quando informações estão inválidas")
+        @WithMockUser
+        void agendar_cenario1() throws Exception {
+                MvcResult result = mvc.perform(post("/consultas"))
+                                .andReturn();
 
-        int status = result.getResponse().getStatus();
+                int status = result.getResponse().getStatus();
 
-        assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }
+                assertThat(status).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        }
 
-    @Test
-    @DisplayName("Deveria devolver código http 200 quando informações estão válidas")
-    @WithMockUser
-    void agendar_cenario2() throws Exception {
-        var data = LocalDateTime.now().plusHours(1);
-        var especialidade = Especialidade.CARDIOLOGIA;
+        @Test
+        @DisplayName("Deveria devolver código http 200 quando informações estão válidas")
+        @WithMockUser
+        void agendar_cenario2() throws Exception {
+                var data = LocalDateTime.now().plusHours(1);
+                var especialidade = Especialidade.CARDIOLOGIA;
 
-        var medico = new Medico(5L, "Dr. João", "joao@email.com", "11999999999", "CRM123",
-                Especialidade.CARDIOLOGIA, null, true);
+                var medico = new Medico(5L, "Dr. João", "joao@email.com", "11999999999", "CRM123",
+                                Especialidade.CARDIOLOGIA, null, true);
 
-        var paciente = new Paciente(1L, "Carlos Silva", "carlos@email.com", "11999999999",
-                "12345678900", null, true);
+                var paciente = new Paciente(1L, "Carlos Silva", "carlos@email.com", "11999999999",
+                                "12345678900", null, true);
 
-        var consulta = new Consulta(1L, medico, paciente, data);
+                var consulta = new Consulta(1L, medico, paciente, data);
 
-        when(agendaDeConsultas.agendar(any())).thenReturn(consulta);
+                when(agendaDeConsultas.agendar(any())).thenReturn(consulta);
 
-        var response = mvc
-                .perform(
-                        post("/consultas")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(dadosAgendamentoConsultaJson.write(
-                                        new DadosAgendamentoConsulta(2L, 5L, data, especialidade)).getJson()))
-                .andReturn()
-                .getResponse();
+                var response = mvc
+                                .perform(
+                                                post("/consultas")
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(dadosAgendamentoConsultaJson.write(
+                                                                                new DadosAgendamentoConsulta(2L, 5L,
+                                                                                                data, especialidade))
+                                                                                .getJson()))
+                                .andReturn()
+                                .getResponse();
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
-        var jsonEsperado = dadosDetalhamentoConsultaJson.write(
-                new DadosDetalhamentoConsulta(consulta.getId(), medico.getId(), paciente.getId(), data)).getJson();
+                var jsonEsperado = dadosDetalhamentoConsultaJson.write(
+                                new DadosDetalhamentoConsulta(consulta)).getJson();
 
-        assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
-    }
+                assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
+        }
 
 }

@@ -36,12 +36,15 @@ public class Paciente {
     }
 
     public void atualizarInformacoes(DadosAtualizacaoPaciente dados) {
-        if (dados.nome() != null) {
+        if (dados.nome() != null)
             this.nome = dados.nome();
-        }
-        if (dados.telefone() != null) {
+        if (dados.email() != null)
+            this.email = dados.email();
+        if (dados.telefone() != null)
             this.telefone = dados.telefone();
-        }
+        if (dados.cpf() != null)
+            this.cpf = dados.cpf();
+
         if (dados.endereco() != null) {
             this.endereco.atualizarInformacoes(dados.endereco());
         }

@@ -42,11 +42,12 @@ public class PacienteController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<DadosDetalhamentoPaciente> atualizar(@PathVariable Long id,
+    public ResponseEntity<DadosDetalhamentoPaciente> atualizar(
+            @PathVariable Long id,
             @RequestBody @Valid DadosAtualizacaoPaciente dados) {
+
         var paciente = repository.getReferenceById(id);
         paciente.atualizarInformacoes(dados);
-
         return ResponseEntity.ok(new DadosDetalhamentoPaciente(paciente));
     }
 
