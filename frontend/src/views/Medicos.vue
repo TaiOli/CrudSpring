@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <router-link to="/" class="nav-link">Inicio</router-link>
+        <router-link to="/" class="nav-link titleHome">Inicio</router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -17,7 +17,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <router-link to="/medicos/cadastrar" class="nav-link">
+              <router-link to="/medicos/cadastrar" class="nav-link titleCadMedico">
                 Cadastrar Médico
               </router-link>
             </li>
@@ -27,7 +27,7 @@
     </nav>
 
     <div class="container mt-4">
-      <h4 class="mb-4">Lista de Médicos</h4>
+      <h4 class="mb-4 titleText">Lista de Médicos</h4>
 
       <div class="mb-3">
         <input
@@ -46,7 +46,7 @@
         >
           <div @click="toggleExpandir(medico.id)" class="d-flex justify-content-between align-items-center pointer">
             <div>
-              <strong>{{ medico.nome }}</strong><br />
+              <strong class="titleText">{{ medico.nome }}</strong><br />
               <small class="text-muted">{{ medico.especialidade }}</small>
             </div>
             <div>

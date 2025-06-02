@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h4 class="mb-5">Agendar Consulta</h4>
+    <h4 class="mb-5 titleConsulta">Agendar Consulta</h4>
     <form @submit.prevent="submitForm">
       
       <div class="mb-3 position-relative">
@@ -79,7 +79,7 @@
         />
       </div>
 
-      <button type="submit" class="btn btn-primary">Agendar</button>
+      <button type="submit" class="btn btn-Agendar">Agendar</button>
     </form>
   </div>
 </template>

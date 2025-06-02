@@ -2,14 +2,26 @@
 	max-width: 400px;
 }
 
-.selectPaciente{
-	z-index: 1000;
+.titleConsulta, 
+.titleText,
+.titleCadMedico,
+.titleCadPaciente,
+.titleHome{
+   color: #0e3c62;
 }
 
+.selectPaciente,
 .selectMedico{
 	z-index: 1000;
 }
 
 .pointer{
 	cursor: pointer;
+}
+
+.btn-Agendar,
+.btn-Voltar,
+.btn-Salvar{
+	background-color: #0e3c62;
+	color: white;
 }
