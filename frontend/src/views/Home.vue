@@ -19,7 +19,7 @@
         </button>
       </router-link>
 
-      <router-link to="/consultas">
+      <router-link to="/consulta">
         <button class="btn btn-primary w-100 py-3 d-flex align-items-center justify-content-center gap-2">
           <i class="bi bi-calendar-event"></i>
           Consultas

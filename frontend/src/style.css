@@ -1,3 +1,15 @@
 .btnAgenda {
 	max-width: 400px;
 }
+
+.selectPaciente{
+	z-index: 1000;
+}
+
+.selectMedico{
+	z-index: 1000;
+}
+
+.pointer{
+	cursor: pointer;
+}

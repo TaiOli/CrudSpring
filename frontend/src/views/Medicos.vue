@@ -44,7 +44,7 @@
           v-for="medico in medicosFiltrados"
           :key="medico.id"
         >
-          <div @click="toggleExpandir(medico.id)" class="d-flex justify-content-between align-items-center" style="cursor: pointer;">
+          <div @click="toggleExpandir(medico.id)" class="d-flex justify-content-between align-items-center pointer">
             <div>
               <strong>{{ medico.nome }}</strong><br />
               <small class="text-muted">{{ medico.especialidade }}</small>

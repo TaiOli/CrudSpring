@@ -41,9 +41,7 @@
         >
           <div
             @click="toggleExpandir(paciente.id)"
-            class="d-flex justify-content-between align-items-center"
-            style="cursor: pointer;"
-          >
+            class="d-flex justify-content-between align-items-center pointer">
             <p class="mb-0"><strong>Nome:</strong> {{ paciente.nome }}</p>
             <span>{{ pacienteExpandido === paciente.id ? "▲" : "▼" }}</span>
           </div>
