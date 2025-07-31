@@ -15,6 +15,8 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
     Page<Medico> findAllByAtivoTrue(Pageable paginacao);
 
+    Page<Medico> findAllByAtivoTrueAndNomeContainingIgnoreCase(String nome, Pageable pageable);
+
     @Modifying
     @Transactional
     @Query("UPDATE Medico p SET p.ativo = false WHERE p.id = :id")

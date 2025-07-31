@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -48,9 +49,19 @@ public class MedicoController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemMedico>> listar(
-            @PageableDefault(size = 10, sort = { "nome" }) Pageable paginacao) {
-        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
-        return ResponseEntity.ok(page);
+            @PageableDefault(size = 10, sort = { "nome" }) Pageable paginacao,
+            @RequestParam(required = false) String nome) {
+
+        Page<Medico> page;
+
+        if (nome == null || nome.isBlank()) {
+            page = repository.findAllByAtivoTrue(paginacao);
+        } else {
+            page = repository.findAllByAtivoTrueAndNomeContainingIgnoreCase(nome, paginacao);
+        }
+
+        var pageDto = page.map(DadosListagemMedico::new);
+        return ResponseEntity.ok(pageDto);
     }
 
     @PutMapping("/{id}")
